@@ -48,13 +48,13 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-public function show(Category $category)
-{
-    // Use findOrFail on the $category model to retrieve the data
-    $category = Category::findOrFail($category->id);
+// public function show(Category $category)
+// {
+//     // Use findOrFail on the $category model to retrieve the data
+//     $category = Category::findOrFail($category->id);
 
-    return view('admin.posts.category.show', ['category' => $category]);
-}
+//     return view('admin.posts.category.show', ['category' => $category]);
+// }
 
 
     /**

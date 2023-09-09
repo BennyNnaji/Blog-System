@@ -17,7 +17,7 @@
                     class="form-input w-4/5">
 
                 <label for="content" class="block"> Post Content</label>
-                <textarea name="content" rows="10" id="content" class="w-4/5 form-textarea"></textarea>
+                <textarea name="content" rows="10" id="content" class="w-4/5 form-textarea">{{ old('content') }}</textarea>
 
                 <label for="category" class="block"> Post Category</label>
                 <select name="category" id="category" class="form-select w-4/5">

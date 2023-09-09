@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>EWT Blog</title>
+    <title>Admin | EWT Blog</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tiny-slider/dist/tiny-slider.css">
     <script src="https://cdn.jsdelivr.net/npm/tiny-slider/dist/min/tiny-slider.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <link rel="shortcut icon" href="{{ asset('storage/images/fav.png') }}" type="image/x-icon">
 </head>
 
 <body>
@@ -25,7 +25,8 @@
             <div class="flex items-center">
                 <div class="mx-3">
                     <button class="px-3 py-2 md:px-5 md:py-3 rounded bg-zinc-500 text-zinc-300 font-bold "><i
-                            class="fa-solid fa-plus animate-bounce"></i> <a href="{{ route('admin.posts.create') }}">Add Post</a></button>
+                            class="fa-solid fa-plus animate-bounce"></i> <a href="{{ route('admin.posts.create') }}">Add
+                            Post</a></button>
                 </div>
                 <div class="relative">
                     <button class="flex items-center">
@@ -57,31 +58,31 @@
 
         {{-- Side Menu --}}
         <div class="w-1/6 min-h-screen bg-stone-700 text-stone-200">
-           <section class="mx-5">
-            <h2 class="italic font-weight-lighter text-sm">Welcome, </h2>
-            <p class="text-lg">{{ Auth::user()->name }}</p>
-            <div>
-                <ul>
-                    <li class="my-5"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+            <section class="mx-5">
+                <h2 class="italic font-weight-lighter text-sm">Welcome, </h2>
+                <p class="text-lg">{{ Auth::user()->name }}</p>
+                <div>
+                    <ul>
+                        <li class="my-5"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
 
 
-                    <li class="my-5"><a href="{{ route('admin.categories') }}">Categories</a></li>
-                    <li class="my-5"><a href="{{ route('admin.posts.create') }}">Posts</a></li>
-                    <li class="my-5"><a href="">Home</a></li>
-                </ul>
-            </div>
+                        <li class="my-5"><a href="{{ route('admin.categories') }}">Categories</a></li>
+                        <li class="my-5"><a href="{{ route('admin.posts.create') }}">Posts</a></li>
+                        <li class="my-5"><a href="">Home</a></li>
+                    </ul>
+                </div>
 
-           </section>
-         
+            </section>
+
         </div>
         {{-- Main Content --}}
 
         <div class=" w-5/6 bg-gray-300/40 p-3">
-             @yield('content')
+            @yield('content')
         </div>
 
     </section>
-   
+
     <script>
         //     Admin Profile dropdown
         // Dropdown toggle

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Comment;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,11 +16,8 @@ class BlogController extends Controller
      */
 public function index()
 {
-    $blogs = Blog::with('author')->get(); // Use 'get' to retrieve all blog posts with the 'author' relationship
-    return view('index',['blogs' => $blogs]);
+
 }
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -26,8 +25,9 @@ public function index()
     {
         $blogs = Category::all();
         return view('admin.posts.create', ['blogs' => $blogs]);
+     
     }
-
+  
     /**
      * Store a newly created resource in storage.
      */
@@ -40,27 +40,8 @@ public function store(Request $request)
         'category' => 'required',
         'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
-           $fileName = time() . '.' . $request->img->extension();
+        $fileName = time() . '.' . $request->img->extension();
         $request->img->storeAs('public/images', $fileName);
-
-//  if ($request->hasFile('img')) {
-//         // Get the uploaded image file
-//         $image = $request->file('img');
-
-//         // Generate a unique filename for the image (e.g., timestamp)
-//         $fileName = time() . '.' . $image->getClientOriginalExtension();
-
-//         // Store the image in the 'public/uploads/images' directory
-//         $imagePath = $image->storeAs('public/uploads/images', $fileName);
-
-//         // Save the image path to your database
-//         $imagePathInDb = str_replace('public/', 'storage/', $imagePath);
-//     } else {
-//         // Handle the case where no image was uploaded
-//         // You might want to provide a default image or return an error message
-//         $imagePathInDb = 'storage/default_image.jpg'; // Update with your default image path
-//     }
-
 
     // Automatically generate the slug based on the title
     $title = $request->input("title");
@@ -79,38 +60,38 @@ public function store(Request $request)
     // Redirect or return a success message
     return redirect()->route('admin.dashboard')->with('success', 'Blog post created successfully!');
 }
-
-
-//     public function store(Request $request)
-//     {
-//         $request -> validate([
-//             'title' => 'required',
-//             'content' => 'required',
-//             'category' => 'required',
-//             'slug' => 'required',
-//             'img' => 'required'
-//         ]);
-// $blog = Blog::create([
-//     'title'=>$request->input("title"),
-//     'content'=>$request->input("content"),
-//     'category' => $request->input("category"),
-//      'slug'=>str_replace(' ', '-', strtolower($request->get('title'))), 
-//     'user_id'=> Auth::user()->id,
-// ]);
-//     }
-
     /**
      * Display the specified resource.
      */
  public function show($slug)
 {
     // Retrieve the blog post based on the provided slug
-    $blogs = Blog::where('slug', $slug)->firstOrFail();
-
+    $blog = Blog::where('slug', $slug)->firstOrFail();
+    // Category on the left sidebar
+    $categories = Category::all();
+    // Comments on a particular post
+    $comments=Comment::with('user')->orderBy('created_at', 'desc')->where('post_id', $blog->id)->get();
+    // Recent Posts on the right sidebar
+     $blogs = Blog::orderBy('created_at', 'desc')->paginate(6);
+    //Related Posts
+$relatedBlogs = Blog::where('category', $blog->category)
+    ->where('slug', '!=', $blog->slug)
+    ->orderBy('created_at', 'desc')
+    ->paginate(4);
     // Pass the blog post to the view
-    return view('show.show', compact('blogs'));
+    return view('show', [
+        // for the post (Pls observe the singular word, BLOG)
+        'blog' => $blog,
+        //        for Recent Posts on the right sidebar. (Pls observe the plural word BLOGS)
+        'blogs' => $blogs,
+        //        For categories on the left side bar
+        'categories' => $categories,
+        //      For   Related posts
+        'relatedBlogs'=>$relatedBlogs,
+        //       For comments on this specific post
+        "comments"=>$comments
+    ]);
 }
-
     /**
      * Show the form for editing the specified resource.
      */

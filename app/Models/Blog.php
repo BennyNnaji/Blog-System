@@ -11,6 +11,10 @@ class Blog extends Model
     public function author(){
         return $this->belongsTo(User::class, 'user_id');
     }
+  
+    public function comment(){
+        return $this->hasMany(Comment::class);
+    }
     protected $fillable = [
         'title', 'content','category', 'slug', 'img', 'user_id',
     ];
